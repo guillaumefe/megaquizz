@@ -1,0 +1,156 @@
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>BotUI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/botui/build/botui.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/botui/build/botui-theme-default.css" />
+  </head>
+  <body>
+        <div id="score" style="position:fixed; top:0;left:45%;font-size:30px;font-family:courrier;">0</div>
+        <div id="my-botui-app">
+            <bot-ui></bot-ui>
+        </div>
+    <script src="https://cdn.jsdelivr.net/vue/latest/vue.min.js"></script>
+    <script src="https://unpkg.com/botui/build/botui.min.js"></script>
+    <script>
+
+        score = 0
+
+        var updateScore = function(val) {
+            score_box = document.getElementById('score')
+            score = score + val
+            score_box.innerHTML = score
+        }
+        
+        var botui = new BotUI('my-botui-app');
+
+        var questions = {
+            "intro" : "Que souhaitez-vous apprendre aujourd'hui?",
+            reseau : [
+                {
+                    question: "Qu'est-ce-qu'un réseau?", 
+                    reponse: "un ensemble d'objets interconnectés"
+                },
+                {
+                    question: "Qu'est-ce-que TCP?", 
+                    reponse: "un protocole de la couche transport"
+                },
+                {
+                    question: "Qu’est-ce que la commande ping ?", 
+                    reponse: "un utilitaire qui permet de tester le dialogue entre deux machines au niveau IP"
+                },
+                {
+                    question: "Quel est le problème de toutes les applications accessibles via un cloud?", 
+                    reponse: "La latence réseau"
+                }
+            ]
+
+        }
+
+
+        var them = ""
+        var bag = []
+        var bag_factor = function(key) {
+            bag = []
+            for (let i in questions[key]) {
+                try {
+                    bag.push(questions[key][i].reponse)
+                } catch(e) {}
+            }
+            return bag
+        }
+        var ask = (them, num)=>questions[them][num].question
+        var answer = (them, num)=>questions[them][num].reponse
+
+        botui.message.add({ // show a message
+            human: true,
+            content: questions['intro'] 
+        }).then(function () { // wait till its shown
+            var topics = []
+            for (let i in questions) {
+                if (i !== 'intro') {
+                    topics.push({
+                        text: i,
+                        value: i
+                    })
+                }
+            }
+            botui.action.button({
+                action: topics
+            }).then(function (res) { // will be called when a button is clicked.
+                //.then(function (res) { // get the result
+                theme = res.value
+                botui.message.add({
+                    content: "ok je cherche"
+                });
+                var brain = function() {
+                    var question_bag = bag_factor(theme)
+                    var rand = Math.floor(Math.random() * questions[theme].length -1) + 1  
+                    var q = ask(res.value, rand)
+                    var r = answer(res.value, rand)
+                    var trashed = []
+                    botui.message.add({
+                        delay: 1500,
+                        content: q
+                    }).then(()=>{
+                        var t1 = Math.floor(Math.random() * question_bag.length - 1) + 1
+                        var t2 = Math.floor(Math.random() * question_bag.length - 1) + 1
+                        var sec = 100
+                        while (question_bag[t1] === r && sec > 0) {
+                            t1 = Math.floor(Math.random() * question_bag.length - 1) + 1
+                            sec = sec - 1
+                        }
+                        while (question_bag[t2] === r && sec > 0) {
+                            t2 = Math.floor(Math.random() * question_bag.length - 1) + 1
+                            sec = sec - 1
+                        }
+                        console.log(sec)
+                        if (t1 !== r && t1 !== t2) {
+                            trashed.push({
+                                text: question_bag[t1],
+                                value: question_bag[t1],
+                            })
+                        }
+                        if (t2 !== r) {
+                            trashed.push({
+                                text: question_bag[t2],
+                                value: question_bag[t2],
+                            })
+                        }
+                        var index = Math.floor(Math.random() * 3) + 1
+                        trashed.splice(index - 1, 0, {
+                            text: r,
+                            value: r
+                        });
+                        botui.action.button({
+                            action: trashed 
+                        }).then(function (res) { // will be called when a button is clicked.
+                            if (res.value == r) {
+                                botui.message.add({
+                                    content: 'well done!'
+                                }).then(()=>{
+                                    updateScore(1)
+                                    brain()
+                                });
+                            } else {
+                                botui.message.add({
+                                    content: 'nope.'
+                                }).then(()=>{
+                                    updateScore(-1)
+                                    brain()
+                                });
+                            }
+                        });
+                    })
+                }
+
+                brain()
+            });
+        })
+    </script>
+  </body>
+</html>
