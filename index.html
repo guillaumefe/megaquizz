@@ -11,7 +11,17 @@
     <link rel="stylesheet" href="./index.css" />
   </head>
   <body>
-      <div style="font-size:30px;font-family:courier;"><div style="float:left;width:50%;">Mega Quizz Bot</div><div style="float:right;width:50%;text-align:right;"><span>Score: </span><span id="score">0</span></div></div>
+      <header style="padding:1%;background:#333;color:lightgreen;position:relative;float:left;width:98%;">
+        <div style="font-weight:bold;font-size:17px;font-family:'Open Sans', sans-serif;">
+          <div style="float:left;width:80%;padding-left:24px;">
+              <span>Inetum/Orsys - POEI-cyber - Mega Quizz Bot</span>
+          </div>
+          <div style="float:right;width:15%;text-align:right;">
+              <span>Score: </span>
+              <span id="score">0</span>
+          </div>
+        </div>
+      </header>
         <div id="my-botui-app">
             <bot-ui></bot-ui>
         </div>
@@ -52,7 +62,7 @@
 
         }
 
-        var url = 'https://docs.google.com/presentation/d/1FngoJ0vlkzoSc7OeYORsUKFrCxLJ7dr_tN32cMeLelw/export/txt';
+        var url = 'http://docs.google.com/presentation/d/1FngoJ0vlkzoSc7OeYORsUKFrCxLJ7dr_tN32cMeLelw/export/txt';
         fetch(url, { method:"GET"} )
         .then(function(response) {
             return response.text()
