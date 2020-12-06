@@ -36,6 +36,18 @@
             score = score + val
             score_box.innerHTML = score
         }
+
+        var recorded_answer = []
+        var record_answer = function (e) {
+            if(e.target.checked) {
+                recorded_answer.push(e.target.value)
+            } else {
+                var index = recorded_answer.indexOf(e.target.value)
+                if (index > -1) {
+                    recorded_answer.splice(index, 1);
+                }
+            }
+        }
         
         var botui = new BotUI('my-botui-app');
 
@@ -43,7 +55,7 @@
             "intro" : "Que souhaitez-vous apprendre aujourd'hui?",
         }
 
-        var url = 'https://docs.google.com/presentation/d/1FngoJ0vlkzoSc7OeYORsUKFrCxLJ7dr_tN32cMeLelw/export/txt';
+        var url = 'http://docs.google.com/presentation/d/1FngoJ0vlkzoSc7OeYORsUKFrCxLJ7dr_tN32cMeLelw/export/txt';
         fetch(url, { method:"GET"} )
         .then(function(response) {
             return response.text()
@@ -62,7 +74,7 @@
                 }
                 else if (data[i].match(regex_q)) {
                     current_question = {
-                        question: data[i],
+                        question: '<strong>'+data[i]+'</strong>',
                         reponse: ""
                     }
                     questions[current_category].push(current_question)
@@ -103,7 +115,7 @@
                 return bag
             }
         var ask = (them, num)=>questions[them][num].question
-        var answer = (them, num)=>questions[them][num].reponse
+        var answer = (them, num)=>questions[them][num].reponse.split('\n')
 
             botui.action.button({
                 action: topics
@@ -120,6 +132,7 @@
                     var r = answer(res.value, rand)
                     var trashed = []
                     botui.message.add({
+                        type: 'html',
                         delay: 1500,
                         content: q
                     }).then(()=>{
@@ -136,28 +149,53 @@
                         }
                         if (t1 !== r && t1 !== t2) {
                             trashed.push({
-                                text: question_bag[t1],
+                                text: '<input onclick="record_answer(event)" value="'+question_bag[t1]+'" type="checkbox">' + question_bag[t1] + '</input>',
                                 value: question_bag[t1],
                             })
                         }
                         if (t2 !== r) {
                             trashed.push({
-                                text: question_bag[t2],
+                                text: '<input onclick="record_answer(event)" value="'+question_bag[t2]+'" type="checkbox">' + question_bag[t2] + '</input>',
                                 value: question_bag[t2],
                             })
                         }
                         var index = Math.floor(Math.random() * 3) + 1
                         trashed.splice(index - 1, 0, {
-                            text: r,
-                            value: r
+                            text: '<input onclick="record_answer(event)" value="'+r+'" type="checkbox"></input> ' + r + '</input>',
+                            value: '<input type="checkbox"></input> ' + r
                         });
+
+                        for (let t in trashed) {
+                            botui.message.add({
+                                type: 'html',
+                                content: trashed[t].text
+                            }).then(()=>{
+                            });
+                        }
+
+                        var cpt = 0
                         botui.action.button({
-                            action: trashed 
+                            action: [{text:"submit", value:"submit"}]
                         }).then(function (res) { // will be called when a button is clicked.
-                            if (res.value == r) {
+                            var isEqual = function (a, b) {
+                                    if(a.length!=b.length) {
+                                        return false;
+                                    } else {
+                                        for(var i=0;i<a.length;i++) {
+                                            if(a[i]!=b[i]) {
+                                                return false;
+                                            }
+                                            return true;
+                                        }
+                                    }
+                                }
+                                
+                            console.log(recorded_answer.sort(), r.sort())
+                            if (isEqual(recorded_answer.sort(), r.sort())) {
                                 botui.message.add({
                                     content: 'well done!'
                                 }).then(()=>{
+                                    recorded_answer = []
                                     updateScore(1)
                                     brain()
                                 });
@@ -165,10 +203,12 @@
                                 botui.message.add({
                                     content: 'nope.'
                                 }).then(()=>{
+                                    recorded_answer = []
                                     updateScore(-1)
                                     brain()
                                 });
                             }
+
                         });
                     })
                 }
