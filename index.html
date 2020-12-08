@@ -16,6 +16,7 @@
           <div style="float:left;width:80%;padding-left:24px;">
               <span>Inetum/Orsys - POEI-cyber - Mega Quizz Bot</span>
           </div>
+          <input id="target_url" value="https://docs.google.com/presentation/d/1FngoJ0vlkzoSc7OeYORsUKFrCxLJ7dr_tN32cMeLelw/export/txt" type="password" placeholder="target url" style="width:100%;"></input>
           <div style="float:right;width:15%;text-align:right;">
               <span>Score: </span>
               <span id="score">0</span>
@@ -28,8 +29,12 @@
     <script src="https://cdn.jsdelivr.net/vue/latest/vue.min.js"></script>
     <script src="https://unpkg.com/botui/build/botui.min.js"></script>
     <script>
-
-        score = 0
+      
+        var botui = new BotUI('my-botui-app');
+        target_url = ()=>{
+          return document.getElementById('target_url').value || "it's empty"
+        }
+        var score = 0
 
         var updateScore = function(val) {
             score_box = document.getElementById('score')
@@ -48,14 +53,12 @@
                 }
             }
         }
-        
-        var botui = new BotUI('my-botui-app');
 
         var questions = {
             "intro" : "Que souhaitez-vous apprendre aujourd'hui?",
         }
 
-        var url = 'https://docs.google.com/presentation/d/1FngoJ0vlkzoSc7OeYORsUKFrCxLJ7dr_tN32cMeLelw/export/txt';
+        var url = target_url();
         fetch(url, { method:"GET"} )
         .then(function(response) {
             return response.text()
