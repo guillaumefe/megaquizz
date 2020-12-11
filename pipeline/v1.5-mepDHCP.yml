@@ -53,7 +53,47 @@ Exercice:
         - Relier PC2 (Fa0) --> S1 (Fa0/3)
         - Relier PC3 (Fa0) --> S2 (Fa0/1)
         - Relier PC4 (Fa0) --> S2 (Fa0/2)
-  - Configurer les vlan:
+  - Configurer le réseau:
+    - Configurer l'ether-channel:
+      - S1 >> CLI:
+        - [S1 >> CLI] `en`
+        - [S1 >> CLI] `conf t`
+        - [S1 >> CLI] `int range g0/1-2`
+        - [S1 >> CLI] `channel-protocol lacp`
+        - [S1 >> CLI] `channel-group 1 mode active`
+        - [S1 >> CLI] `no shut`
+        - [S1 >> CLI] `exit`
+        - [S1 >> CLI] `int range f0/4-5`
+        - [S1 >> CLI] `channel-protocol lacp`
+        - [S1 >> CLI] `channel-group 2 mode passive`
+        - [S1 >> CLI] `no shut`
+        - [S1 >> CLI] `exit`
+      - S2 >> CLI:
+        - [S2 >> CLI] `en`
+        - [S2 >> CLI] `conf t`
+        - [S2 >> CLI] `int range g0/1-2`
+        - [S2 >> CLI] `channel-protocol lacp`
+        - [S2 >> CLI] `channel-group 1 mode passive`
+        - [S2 >> CLI] `no shut`
+        - [S2 >> CLI] `exit`
+        - [S2 >> CLI] `int range f0/3-4`
+        - [S2 >> CLI] `channel-protocol lacp`
+        - [S2 >> CLI] `channel-group 3 mode active`
+        - [S2 >> CLI] `no shut`
+        - [S2 >> CLI] `exit`
+      - S3 >> CLI:
+        - [S3 >> CLI] `en`
+        - [S3 >> CLI] `conf t`
+        - [S3 >> CLI] `int range f0/3-4`
+        - [S3 >> CLI] `channel-protocol lacp`
+        - [S3 >> CLI] `channel-group 3 mode passive`
+        - [S3 >> CLI] `no shut`
+        - [S3 >> CLI] `exit`
+        - [S3 >> CLI] `int range f0/1-2`
+        - [S3 >> CLI] `channel-protocol lacp`
+        - [S3 >> CLI] `channel-group 2 mode active`
+        - [S3 >> CLI] `no shut`
+        - [S3 >> CLI] `exit`
     - Créer les vlan:
       - Créer vlan 10, 20 et 30 sur chacun des switch:
         - S1 >> CLI:
@@ -80,49 +120,9 @@ Exercice:
           - [S3 >> CLI] `vlan 20`
           - [S3 >> CLI] `name Utilisateurs`
           - [S3 >> CLI] `vlan 30`
-      - Configurer l'ether-channel:
-        - S1 >> CLI:
-          - [S1 >> CLI] `en`
-          - [S1 >> CLI] `conf t`
-          - [S1 >> CLI] `int range g0/1-2`
-          - [S1 >> CLI] `channel-protocol lacp`
-          - [S1 >> CLI] `channel-group 1 mode active`
-          - [S1 >> CLI] `no shut`
-          - [S1 >> CLI] `exit`
-          - [S1 >> CLI] `int range f0/4-5`
-          - [S1 >> CLI] `channel-protocol lacp`
-          - [S1 >> CLI] `channel-group 2 mode passive`
-          - [S1 >> CLI] `no shut`
-          - [S1 >> CLI] `exit`
-        - S2 >> CLI:
-          - [S2 >> CLI] `en`
-          - [S2 >> CLI] `conf t`
-          - [S2 >> CLI] `int range g0/1-2`
-          - [S2 >> CLI] `channel-protocol lacp`
-          - [S2 >> CLI] `channel-group 1 mode passive`
-          - [S2 >> CLI] `no shut`
-          - [S2 >> CLI] `exit`
-          - [S2 >> CLI] `int range f0/3-4`
-          - [S2 >> CLI] `channel-protocol lacp`
-          - [S2 >> CLI] `channel-group 3 mode active`
-          - [S2 >> CLI] `no shut`
-          - [S2 >> CLI] `exit`
-        - S3 >> CLI:
-          - [S3 >> CLI] `en`
-          - [S3 >> CLI] `conf t`
-          - [S3 >> CLI] `int range f0/3-4`
-          - [S3 >> CLI] `channel-protocol lacp`
-          - [S3 >> CLI] `channel-group 3 mode passive`
-          - [S3 >> CLI] `no shut`
-          - [S3 >> CLI] `exit`
-          - [S3 >> CLI] `int range f0/1-2`
-          - [S3 >> CLI] `channel-protocol lacp`
-          - [S3 >> CLI] `channel-group 2 mode active`
-          - [S3 >> CLI] `no shut`
-          - [S3 >> CLI] `exit`
-  - Servir les machines de Vlan30 avec ServerDHCP:
-      - Répartir les machines dans les Vlan:
+     - Répartir les machines dans les Vlan:
         - ...
+  - Servir les machines de Vlan30 avec ServerDHCP:
       - Configurer ServerDHCP:
         - ip:
           - réseau: 192.168.30.0
