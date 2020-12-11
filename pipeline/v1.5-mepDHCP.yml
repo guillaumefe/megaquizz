@@ -31,7 +31,10 @@ Exercice:
       - PC4:
         - PC4 (Fa0) --> S2 (Fa0/2)
   - mettre en place un serveur DHCP dans le Vlan30:
-    - créer le vlan 30
+    - créer les vlan:
+      - créer vlan 10 ADMIN
+      - créer vlan 20 Utilisateurs
+      - créer vlan 30
     - créer le serveur DHCP
     - configurer le serveur DHCP pour délivrer des adresses sur d'autres Vlan
     - répondre à la question
