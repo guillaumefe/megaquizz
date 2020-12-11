@@ -1,0 +1,11 @@
+Objectif: |
+  mettre en place un serveur DHCP dans le Vlan30 puis lui faire 
+  délivrer des adresses IP aux autres machines du réseau (Vlan 10 et Vlan 20 inclus).
+  Est-ce-possible?
+  
+---
+  
+Exercice:
+  - récupérer la base de travail ici:
+    - https://cdn.discordapp.com/attachments/780779054243905589/786971735886659614/Archi_v1.5_MiseEnPlaceDHCP.pkt
+  - 
