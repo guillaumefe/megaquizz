@@ -1,14 +1,14 @@
 Objectif: |
-  mettre en place un serveur DHCP dans le Vlan30 puis lui faire 
+  Mettre en place un serveur DHCP dans le Vlan30 puis lui faire 
   délivrer des adresses IP aux autres machines du réseau (Vlan 10 et Vlan 20 inclus).
   Est-ce-possible?
   
 ---
   
 Exercice:
-  - récupérer la base de travail ici:
+  - Récupérer la base de travail ici:
     - https://cdn.discordapp.com/attachments/780779054243905589/786971735886659614/Archi_v1.5_MiseEnPlaceDHCP.pkt
-  - liste des éléments:
+  - Liste des éléments:
     - Switch:
       - 3560:
         - S1
@@ -22,7 +22,6 @@ Exercice:
     - Routeur:
       - 2811:
         - Router0
-      - Router0 (Fa0) --> S3 (Fa0/24)
     - Machines:
       - PC0:
         - PC0 (Fa0) --> S1 (Fa0/1)
@@ -34,73 +33,76 @@ Exercice:
         - PC3 (Fa0) --> S2 (Fa0/1)
       - PC4:
         - PC4 (Fa0) --> S2 (Fa0/2)
+  - Connexion du routeur au réseau de switch:
+    - Router0 (Fa0) --> S3 (Fa0/24)
+    - Adresser manuellement Router0:
+      - 172.16.10.1/16
   - mettre en place un serveur DHCP dans le Vlan30:
-    - adresser:
-      - PC0:
-        - 192.168.10.1/24
-      - PC1:
-        - 192.168.20.1/24
-      - PC2:
-        - 192.168.20.2/24
-      - PC3:
-        - 192.168.20.3/24
-      - PC4:
-        - 192.168.20.4/24
-      - ServerDHCP:
-        - 192.168.30.1/24
-      - Router0:
-        - 172.16.10.1/16
-    - créer les vlan:
-      - créer vlan 10, 20 et 30 sur les switch:
-        - S1:
-          - `en`
-          - `conf t`
-          - `vlan 10`
-          - name ADMIN
-          - `vlan 20`
-          - name Utilisateurs
-          - `vlan 30`
-        - S2:
-          - `en`
-          - `conf t`
-          - `vlan 10`
-          - name ADMIN
-          - `vlan 20`
-          - name Utilisateurs
-          - `vlan 30`
-        - S3:
-          - `en`
-          - `conf t`
-          - `vlan 10`
-          - name ADMIN
-          - `vlan 20`
-          - name Utilisateurs
-          - `vlan 30`
-    - créer l'ether-channel:
-      - S1:
-        - `en`
-        - `conf t`
-        - ...
-      - S2:
-        - `en`
-        - `conf t`
-        - ...
-      - S3:
-        - `en`
-        - `conf t`
-        - ...
+      - Configurer les switch:
+        - Créer les vlan:
+          - Créer vlan 10, 20 et 30 sur les switch:
+            - S1:
+              - `en`
+              - `conf t`
+              - `vlan 10`
+              - `name ADMIN`
+              - `vlan 20`
+              - `name Utilisateurs`
+              - `vlan 30`
+            - S2:
+              - `en`
+              - `conf t`
+              - `vlan 10`
+              - `name ADMIN`
+              - `vlan 20`
+              - `name Utilisateurs`
+              - `vlan 30`
+            - S3:
+              - `en`
+              - `conf t`
+              - `vlan 10`
+              - `name ADMIN`
+              - `vlan 20`
+              - `name Utilisateurs`
+              - `vlan 30`
+          - Configurer l'ether-channel:
+            - S1:
+              - `en`
+              - `conf t`
+              - ...
+            - S2:
+              - `en`
+              - `conf t`
+              - ...
+            - S3:
+              - `en`
+              - `conf t`
+              - ...
     - créer le serveur DHCP:
-      - serverDHCP (Fa0) --> S2 (Fa0/5)
-      - attribuer static ip:
-        - serverDHCP >> CLI:
+      - ServerDHCP (Fa0) --> S2 (Fa0/5)
+      - Attribuer static ip:
+        - ServerDHCP >> CLI:
           - `en`
           - `conf t`
-          - ...
-      - configurer DHCP pour servir le vlan 30
-    - configurer le serveur DHCP pour délivrer des adresses sur vlan 10 et vlan 20:
-      - configurer le serveur DHCP pour délivrer des adresses sur d'autres Vlan:
-        - rechercher si c'est possible
-        - répondre à la question
-        - faire si possible
+          - `ip address `
+      - Configurer DHCP pour servir le vlan 30:
+        - Configurer le serveur DHCP:
+          - Adresser manuellement le serveur DHCP:
+            - ServerDHCP:
+              - 192.168.30.1/24
+        - Attribuer les adresses aux machines du vlan 13 via DHCP:
+          - Domaines d'attribution:
+            - 192.168.10.0/24:
+              - PC0
+            - 192.168.20.0/24:
+              - PC1
+              - PC2
+              - PC3
+              - PC4
+    - Configurer le serveur DHCP pour délivrer des adresses sur vlan 10 et vlan 20:
+      - Configurer le serveur DHCP pour délivrer des adresses sur d'autres Vlan:
+        - Rechercher si c'est possible
+        - Répondre à la question
+        - Faire si possible
 
     
