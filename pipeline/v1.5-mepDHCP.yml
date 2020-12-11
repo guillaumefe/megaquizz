@@ -24,6 +24,13 @@ Exercice:
     - Serveur:
       - Ajouter un serveur DHCP:
         - Ajouter un serveur nommé ServerDHCP
+        - Configurer ServerDHCP:
+          - ip:
+            - réseau: 192.168.30.0
+            - masque: 255.255.255.0
+            - range ip:
+              - min: 2
+              - max: 99
         - Connecter le serveur DHCP au réseau de switch:
           - Relier ServerDHCP (Fa0) --> S2 (Fa0/5)
         - Adresser manuellement ServerDHCP:
@@ -121,24 +128,20 @@ Exercice:
           - [S3 >> CLI] `name Utilisateurs`
           - [S3 >> CLI] `vlan 30`
      - Répartir les machines dans les Vlan:
-        - ...
-  - Servir les machines de Vlan30 avec ServerDHCP:
-      - Configurer ServerDHCP:
-        - ip:
-          - réseau: 192.168.30.0
-          - masque: 255.255.255.0
-          - range ip:
-            - min: 2
-            - max: 99
+        - Assigner PC0 à Vlan10:
+          - ...
+        - Assigner PC1, PC2, PC3, PC4 à Vlan20:
+          - ...
+      - Servir les machines de Vlan30 avec ServerDHCP:
         - Assigner ServerDHCP à Vlan30:
           - S2 >> CLI:
             - [S2 >> CLI] `en`
             - [S2 >> CLI] `conf t`
             - [S2 >> CLI] `...`
-  - Servir Vlan10 et Vlan20 avec ServerDHCP:
-    - Rechercher s'il est possible de servir DHCP depuis un vlan vers un autre vlan
-    - Rechercher un workaround pour le faire
-    - Répondre à la question
-    - Implémenter la solution
+        - Servir Vlan10 et Vlan20 avec ServerDHCP:
+          - Rechercher s'il est possible de servir DHCP depuis un vlan vers un autre vlan
+          - Rechercher un workaround pour le faire
+          - Répondre à la question
+          - Implémenter la solution
 
     
