@@ -8,4 +8,32 @@ Objectif: |
 Exercice:
   - récupérer la base de travail ici:
     - https://cdn.discordapp.com/attachments/780779054243905589/786971735886659614/Archi_v1.5_MiseEnPlaceDHCP.pkt
-  - 
+  - liste des éléments:
+    - Switch:
+      - 3560:
+        - S1
+        - S2
+        - S3
+      - S1 <==> S2 (copper)
+      - S2 <==> S3 (copper)
+      - S3 <==> S1 (copper)
+    - Server:
+      - ServerDHCP
+    - Machines:
+      - PC0:
+        - PC0 (Fa0) --> S1 (Fa0/1)
+      - PC1:
+        - PC1 (Fa0) --> S1 (Fa0/2)
+      - PC2:
+        - PC2 (Fa0) --> S1 (Fa0/3)
+      - PC3:
+        - PC3 (Fa0) --> S2 (Fa0/1)
+      - PC4:
+        - PC4 (Fa0) --> S2 (Fa0/2)
+  - mettre en place un serveur DHCP dans le Vlan30:
+    - créer le vlan 30
+    - créer le serveur DHCP
+    - configurer le serveur DHCP pour délivrer des adresses sur d'autres Vlan
+    - répondre à la question
+    
+    
