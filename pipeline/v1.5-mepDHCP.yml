@@ -32,11 +32,68 @@ Exercice:
         - PC4 (Fa0) --> S2 (Fa0/2)
   - mettre en place un serveur DHCP dans le Vlan30:
     - créer les vlan:
-      - créer vlan 10 ADMIN
-      - créer vlan 20 Utilisateurs
-      - créer vlan 30
-    - créer le serveur DHCP
-    - configurer le serveur DHCP pour délivrer des adresses sur d'autres Vlan
-    - répondre à la question
+      - créer vlan 10 ADMIN:
+        - S1:
+          - `en`
+          - `conf t`
+          - ...
+        - S2:
+          - `en`
+          - `conf t`
+          - ...
+        - S3:
+          - `en`
+          - `conf t`
+          - ...
+      - créer vlan 20 Utilisateurs:
+        - S1:
+          - `en`
+          - `conf t`
+          - ...
+        - S2:
+          - `en`
+          - `conf t`
+          - ...
+        - S3:
+          - `en`
+          - `conf t`
+          - ...
+      - créer vlan 30:
+        - S1:
+          - `en`
+          - `conf t`
+          - ...
+        S2:
+          - `en`
+          - `conf t`
+          - ...
+        S3:
+          - `en`
+          - `conf t`
+          - ...
+    - créer l'ether-channel:
+      - S1:
+        - `en`
+        - `conf t`
+        - ...
+      - S2:
+        - `en`
+        - `conf t`
+        - ...
+      - S3:
+        - `en`
+        - `conf t`
+        - ...
+    - créer le serveur DHCP:
+      - serverDHCP (Fa0) --> S2 (Fa0/5)
+      - attribuer static ip:
+        - serverDHCP >> CLI:
+          - `en`
+          - `conf t`
+          - ...
+    - configurer le serveur DHCP pour délivrer des adresses sur d'autres Vlan:
+      - rechercher si c'est possible
+      - répondre à la question
+      - faire si possible
     
     
