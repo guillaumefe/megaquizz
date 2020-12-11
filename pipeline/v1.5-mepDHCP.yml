@@ -36,13 +36,20 @@ Exercice:
         - PC4 (Fa0) --> S2 (Fa0/2)
   - mettre en place un serveur DHCP dans le Vlan30:
     - adresser:
-      - PC0
-      - PC1
-      - PC2
-      - PC3
-      - PC4
-      - ServerDHCP
-      - Router0
+      - PC0:
+        - 192.168.10.1/24
+      - PC1:
+        - 192.168.20.1/24
+      - PC2:
+        - 192.168.20.1/24
+      - PC3:
+        - 192.168.20.1/24
+      - PC4:
+        - 192.168.20.1/24
+      - ServerDHCP:
+        - 192.168.30.1/24
+      - Router0:
+        - 172.16.10.1/16
     - créer les vlan:
       - créer vlan 10 ADMIN:
         - S1:
