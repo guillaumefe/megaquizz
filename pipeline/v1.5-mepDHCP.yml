@@ -8,101 +8,107 @@ Objectif: |
 Exercice:
   - Récupérer la base de travail ici:
     - https://cdn.discordapp.com/attachments/780779054243905589/786971735886659614/Archi_v1.5_MiseEnPlaceDHCP.pkt
-  - Liste des éléments:
+  - Préparer les éléments:
     - Switch:
       - 3560:
-        - S1
-        - S2
-        - S3
-      - S1 <==> S2 (copper)
-      - S2 <==> S3 (copper)
-      - S3 <==> S1 (copper)
-    - Server:
-      - ServerDHCP
+        - Ajouter un switch 3560 nommé S1
+        - Ajouter un switch 3560 nommé S2
+        - Ajouter un switch 3560 nommé S3
+      - Relier les swich entre eux:
+        - Relier S1 <==> S2 (cable copper)
+        - Relier S2 <==> S3 (cable copper)
+        - Relier S3 <==> S1 (cable copper)
+    - Serveur:
+      - Ajouter un serveur DHCP:
+        - Ajouter un serveur nommé ServerDHCP
+        - Connecter le serveur DHCP au réseau de switch:
+          - Relier ServerDHCP (Fa0) --> S2 (Fa0/5)
+        - Adresser manuellement ServerDHCP:
+          - Donner l'adresse 192.168.30.1/24 à ServerDHCP
     - Routeur:
       - 2811:
-        - Router0
+        - Ajouter un routeur 2811 nommé Router0
+        - Connecter le routeur au réseau de switch:
+          - Relier Router0 (Fa0) --> S3 (Fa0/24)
+        - Adresser manuellement Router0:
+          - Donner l'adresse 172.16.10.1/16 à Router0:
+            - Router0 >> CLI:
+              - [Router0 >> CLI] `en`
+              - [Router0 >> CLI] `conf t`
+              - [Router0 >> CLI] `int fa0/0`
+              - [Router0 >> CLI] `ip address 172.16.10.1 255.255.0.0`
     - Machines:
-      - PC0:
-        - PC0 (Fa0) --> S1 (Fa0/1)
-      - PC1:
-        - PC1 (Fa0) --> S1 (Fa0/2)
-      - PC2:
-        - PC2 (Fa0) --> S1 (Fa0/3)
-      - PC3:
-        - PC3 (Fa0) --> S2 (Fa0/1)
-      - PC4:
-        - PC4 (Fa0) --> S2 (Fa0/2)
-  - Connexion du routeur au réseau de switch:
-    - Router0 (Fa0) --> S3 (Fa0/24)
-    - Adresser manuellement Router0:
-      - 172.16.10.1/16
-  - mettre en place un serveur DHCP dans le Vlan30:
-      - Configurer les switch:
-        - Créer les vlan:
-          - Créer vlan 10, 20 et 30 sur les switch:
-            - S1:
-              - `en`
-              - `conf t`
-              - `vlan 10`
-              - `name ADMIN`
-              - `vlan 20`
-              - `name Utilisateurs`
-              - `vlan 30`
-            - S2:
-              - `en`
-              - `conf t`
-              - `vlan 10`
-              - `name ADMIN`
-              - `vlan 20`
-              - `name Utilisateurs`
-              - `vlan 30`
-            - S3:
-              - `en`
-              - `conf t`
-              - `vlan 10`
-              - `name ADMIN`
-              - `vlan 20`
-              - `name Utilisateurs`
-              - `vlan 30`
-          - Configurer l'ether-channel:
-            - S1:
-              - `en`
-              - `conf t`
-              - ...
-            - S2:
-              - `en`
-              - `conf t`
-              - ...
-            - S3:
-              - `en`
-              - `conf t`
-              - ...
-    - créer le serveur DHCP:
-      - ServerDHCP (Fa0) --> S2 (Fa0/5)
-      - Attribuer static ip:
-        - ServerDHCP >> CLI:
-          - `en`
-          - `conf t`
-          - `ip address `
-      - Configurer DHCP pour servir le vlan 30:
-        - Configurer le serveur DHCP:
-          - Adresser manuellement le serveur DHCP:
-            - ServerDHCP:
-              - 192.168.30.1/24
-        - Attribuer les adresses aux machines du vlan 13 via DHCP:
-          - Domaines d'attribution:
-            - 192.168.10.0/24:
-              - PC0
-            - 192.168.20.0/24:
-              - PC1
-              - PC2
-              - PC3
-              - PC4
-    - Configurer le serveur DHCP pour délivrer des adresses sur vlan 10 et vlan 20:
-      - Configurer le serveur DHCP pour délivrer des adresses sur d'autres Vlan:
-        - Rechercher si c'est possible
-        - Répondre à la question
-        - Faire si possible
+      - Ajouter des ordinateurs:
+        - Ajouter un ordinateur nommé PC0
+        - Ajouter un ordinateur nommé PC1
+        - Ajouter un ordinateur nommé PC2
+        - Ajouter un ordinateur nommé PC3
+        - Ajouter un ordinateur nommé PC4
+      - Relier les ordinateurs au réseau de switch:
+        - Relier PC0 (Fa0) --> S1 (Fa0/1)
+        - Relier PC1 (Fa0) --> S1 (Fa0/2)
+        - Relier PC2 (Fa0) --> S1 (Fa0/3)
+        - Relier PC3 (Fa0) --> S2 (Fa0/1)
+        - Relier PC4 (Fa0) --> S2 (Fa0/2)
+  - Configurer les vlan:
+    - Créer les vlan:
+      - Créer vlan 10, 20 et 30 sur chacun des switch:
+        - S1 >> CLI:
+          - [S1 >> CLI] `en`
+          - [S1 >> CLI] `conf t`
+          - [S1 >> CLI] `vlan 10`
+          - [S1 >> CLI] `name ADMIN`
+          - [S1 >> CLI] `vlan 20`
+          - [S1 >> CLI] `name Utilisateurs`
+          - [S1 >> CLI] `vlan 30`
+        - S2 >> CLI:
+          - [S2 >> CLI] `en`
+          - [S2 >> CLI] `conf t`
+          - [S2 >> CLI] `vlan 10`
+          - [S2 >> CLI] `name ADMIN`
+          - [S2 >> CLI] `vlan 20`
+          - [S2 >> CLI] `name Utilisateurs`
+          - [S2 >> CLI] `vlan 30`
+        - S3 >> CLI:
+          - [S3 >> CLI] `en`
+          - [S3 >> CLI] `conf t`
+          - [S3 >> CLI] `vlan 10`
+          - [S3 >> CLI] `name ADMIN`
+          - [S3 >> CLI] `vlan 20`
+          - [S3 >> CLI] `name Utilisateurs`
+          - [S3 >> CLI] `vlan 30`
+      - Configurer l'ether-channel:
+        - S1 >> CLI:
+          - [S1 >> CLI] `en`
+          - [S1 >> CLI] `conf t`
+          - ...
+        - S2 >> CLI:
+          - [S2 >> CLI] `en`
+          - [S2 >> CLI] `conf t`
+          - ...
+        - S3 >> CLI:
+          - [S3 >> CLI] `en`
+          - [S3 >> CLI] `conf t`
+          - ...
+  - Répartir les machines dans les Vlan:
+    - ...
+  - Servir Vlan30 avec ServerDHCP:
+      - Configurer DHCP:
+        - ip:
+          - réseau: 192.168.30.0
+          - masque: 255.255.255.0
+          - range ip:
+            - min: 2
+            - max: 99
+        - Assigner ServerDHCP à Vlan30:
+          - S2 >> CLI:
+            - [S2 >> CLI] `en`
+            - [S2 >> CLI] `conf t`
+            - [S2 >> CLI] `...`
+  - Servir Vlan10 et Vlan20 avec ServerDHCP:
+    - Rechercher s'il est possible de servir DHCP depuis un vlan vers un autre vlan
+    - Rechercher un workaround pour le faire
+    - Répondre à la question
+    - Implémenter la solution
 
     
