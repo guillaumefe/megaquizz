@@ -51,45 +51,31 @@ Exercice:
       - Router0:
         - 172.16.10.1/16
     - créer les vlan:
-      - créer vlan 10 ADMIN:
+      - créer vlan 10, 20 et 30 sur les switch:
         - S1:
           - `en`
           - `conf t`
-          - ...
+          - `vlan 10`
+          - name ADMIN
+          - `vlan 20`
+          - name Utilisateurs
+          - `vlan 30`
         - S2:
           - `en`
           - `conf t`
-          - ...
+          - `vlan 10`
+          - name ADMIN
+          - `vlan 20`
+          - name Utilisateurs
+          - `vlan 30`
         - S3:
           - `en`
           - `conf t`
-          - ...
-      - créer vlan 20 Utilisateurs:
-        - S1:
-          - `en`
-          - `conf t`
-          - ...
-        - S2:
-          - `en`
-          - `conf t`
-          - ...
-        - S3:
-          - `en`
-          - `conf t`
-          - ...
-      - créer vlan 30:
-        - S1:
-          - `en`
-          - `conf t`
-          - ...
-        S2:
-          - `en`
-          - `conf t`
-          - ...
-        S3:
-          - `en`
-          - `conf t`
-          - ...
+          - `vlan 10`
+          - name ADMIN
+          - `vlan 20`
+          - name Utilisateurs
+          - `vlan 30`
     - créer l'ether-channel:
       - S1:
         - `en`
