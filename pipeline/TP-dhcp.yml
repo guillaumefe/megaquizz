@@ -12,20 +12,23 @@ Connexions:
   - Routeur(fa0/1) --> DHCP(fa0)
 
 Configuration:
-  Configuration du routeur (router0):
-      - interface f0/1 (coté Serveur):
-        - switch on
-        - ip :
-          - `192.168.1.1` `255.255.255.0`
-        - `ip helper-address 192.168.1.2` #ip helper-adress first occurence
-      - interface fa0/0 (coté PC0):
-        - switch on
+  - Configuration du routeur (router0):
+      - Interface f0/1 (coté Serveur DHCP):
+        - Dans l'interface graphique:
+          - Switch on
+          - Ip :
+            - `192.168.1.1` `255.255.255.0`
+        - Depuis le cli du routeur:
+          - `ip helper-address 192.168.1.2` #ip helper-adress first occurence
+      - Interface fa0/0 (coté PC0):
+        - Switch on
         -  ip:
           - `192.168.0.1` `255.255.255.0`
         - `ip helper-address 192.168.1.2` #ip helper-adress second occurence
 
+  # *****************************************
 
-  Configuration du serveur (DHCP):
+  - Configuration du serveur (DHCP):
     - interface f0:
       - ip fixe:
         - `192.168.1.2` `255.255.255.0`
@@ -40,13 +43,16 @@ Configuration:
         - `192.168.0.3`
       - pool d'adresse:
         - `192.168.0.2` `255.255.255.0`
-
-  Configuration du PC (PC0):
-    - interface fa0:
-      - [Objectif] demander une ip:
+        
+  # *****************************************
+  
+  - Configuration du PC (PC0):
+    - Interface fa0:
+      - **Objectif, obtenir une ip automatiquement**:
         - [Menu] Desktop >> IP configuration
         - [Action] Toggle DHCP/Static
-
+  
+  
 Trouble shooting:
   - `do sh int brief`
   - re-démarrer packet tracer
