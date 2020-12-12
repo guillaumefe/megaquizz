@@ -7,7 +7,10 @@ Objectif: |
   
 Exercice:
   - Récupérer la base de travail:
-    - ouvrir https://cdn.discordapp.com/attachments/780779054243905589/786971735886659614/Archi_v1.5_MiseEnPlaceDHCP.pkt dans Packet Tracer
+    - ouvrir Packet Tracer
+    - Packet Tracer:
+      - File >> New
+      - File >> Save as `v1.5-mepDHCP.pkt`
   - Préparer les éléments:
     - Switch:
       - 3560:
