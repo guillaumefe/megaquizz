@@ -1,0 +1,52 @@
+#TP
+#int f0/0.20
+#encapsulation dot1Q 20
+
+Matériel
+  - Router 2811
+  - PC
+  - Server
+
+Connexions:
+  - PC0 (fa0) --> Routeur (fa/00)
+  - Routeur(fa0/1) --> DHCP(fa0)
+
+Configuration:
+  Configuration du routeur (router0):
+      - interface f0/1 (coté Serveur):
+        - switch on
+        - ip :
+          - `192.168.1.1` `255.255.255.0`
+        - `ip helper-address 192.168.1.2` #ip helper-adress first occurence
+      - interface fa0/0 (coté PC0):
+        - switch on
+        -  ip:
+          - `192.168.0.1` `255.255.255.0`
+        - `ip helper-address 192.168.1.2` #ip helper-adress second occurence
+
+
+  Configuration du serveur (DHCP):
+    - interface f0:
+      - ip fixe:
+        - `192.168.1.2` `255.255.255.0`
+      - gateway:
+        -  `192.168.1.1`
+        - `0.0.0.0`
+    - service >> DHCP:
+      - service on
+      - gateway: 
+        - `0.0.0.0`
+        - `192.168.1.1`
+        - `192.168.0.3`
+      - pool d'adresse:
+        - `192.168.0.2` `255.255.255.0`
+
+  Configuration du PC (PC0):
+    - interface fa0:
+      - [Objectif] demander une ip:
+        - [Menu] Desktop >> IP configuration
+        - [Action] Toggle DHCP/Static
+
+Trouble shooting:
+  - `do sh int brief`
+  - re-démarrer packet tracer
