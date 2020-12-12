@@ -156,7 +156,7 @@ Exercice:
           - créer vlan 30:
             - [S3 >> CLI] `vlan 30`
           - [S3 >> CLI] `ex`
-    - Configurer les switchs dans le but de partager les vlan:
+    - Partager les vlan entre les switch:
       - S1 >> CLI:
         - [S1 >> CLI] `int port-channel 1`
         - [S1 >> CLI] `switch port trunk encapsulation dot1q`
