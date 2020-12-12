@@ -3,10 +3,12 @@ Objectif: |
   délivrer des adresses IP aux autres machines du réseau (Vlan 10 et Vlan 20 inclus).
   Est-ce-possible?
   
+  Implémentation de référence: https://cdn.discordapp.com/attachments/780779054243905589/786971735886659614/Archi_v1.5_MiseEnPlaceDHCP.pkt
+  
 ---
   
 Exercice:
-  - Récupérer la base de travail:
+  - Préparer le workspace Cisco:
     - ouvrir Packet Tracer
     - Packet Tracer:
       - File >> New
@@ -68,108 +70,151 @@ Exercice:
       - S1 >> CLI:
         - [S1 >> CLI] `en`
         - [S1 >> CLI] `conf t`
-        - [S1 >> CLI] `int range g0/1-2`
-        - [S1 >> CLI] `channel-protocol lacp`
-        - [S1 >> CLI] `channel-group 1 mode active`
-        - [S1 >> CLI] `no shut`
-        - [S1 >> CLI] `exit`
-        - [S1 >> CLI] `int range f0/4-5`
-        - [S1 >> CLI] `channel-protocol lacp`
-        - [S1 >> CLI] `channel-group 2 mode passive`
-        - [S1 >> CLI] `no shut`
-        - [S1 >> CLI] `ex`
+        - configurer interface vers S2:
+          - [S1 >> CLI] `int range g0/1-2`
+          - [S1 >> CLI] `channel-protocol lacp`
+          - [S1 >> CLI] `channel-group 1 mode active`
+          - [S1 >> CLI] `no shut`
+          - [S1 >> CLI] `ex`
+        - configurer interface vers S3:
+          - [S1 >> CLI] `int range f0/4-5`
+          - [S1 >> CLI] `channel-protocol lacp`
+          - [S1 >> CLI] `channel-group 2 mode passive`
+          - [S1 >> CLI] `no shut`
+          - [S1 >> CLI] `ex`
       - S2 >> CLI:
         - [S2 >> CLI] `en`
         - [S2 >> CLI] `conf t`
-        - [S2 >> CLI] `int range g0/1-2`
-        - [S2 >> CLI] `channel-protocol lacp`
-        - [S2 >> CLI] `channel-group 1 mode passive`
-        - [S2 >> CLI] `no shut`
-        - [S2 >> CLI] `exit`
-        - [S2 >> CLI] `int range f0/3-4`
-        - [S2 >> CLI] `channel-protocol lacp`
-        - [S2 >> CLI] `channel-group 3 mode active`
-        - [S2 >> CLI] `no shut`
-        - [S2 >> CLI] `ex`
+        - configurer interface vers S1:
+          - [S2 >> CLI] `int range g0/1-2`
+          - [S2 >> CLI] `channel-protocol lacp`
+          - [S2 >> CLI] `channel-group 1 mode passive`
+          - [S2 >> CLI] `no shut`
+          - [S2 >> CLI] `ex`
+        - configurer interface vers S3:
+          - [S2 >> CLI] `int range f0/3-4`
+          - [S2 >> CLI] `channel-protocol lacp`
+          - [S2 >> CLI] `channel-group 3 mode active`
+          - [S2 >> CLI] `no shut`
+          - [S2 >> CLI] `ex`
       - S3 >> CLI:
         - [S3 >> CLI] `en`
         - [S3 >> CLI] `conf t`
-        - [S3 >> CLI] `int range f0/3-4`
-        - [S3 >> CLI] `channel-protocol lacp`
-        - [S3 >> CLI] `channel-group 3 mode passive`
-        - [S3 >> CLI] `no shut`
-        - [S3 >> CLI] `exit`
-        - [S3 >> CLI] `int range f0/1-2`
-        - [S3 >> CLI] `channel-protocol lacp`
-        - [S3 >> CLI] `channel-group 2 mode active`
-        - [S3 >> CLI] `no shut`
-        - [S3 >> CLI] `ex`
+        - configurer interface vers S2:
+          - [S3 >> CLI] `int range f0/3-4`
+          - [S3 >> CLI] `channel-protocol lacp`
+          - [S3 >> CLI] `channel-group 3 mode passive`
+          - [S3 >> CLI] `no shut`
+          - [S3 >> CLI] `ex`
+        - configurer interface vers S1:
+          - [S3 >> CLI] `int range f0/1-2`
+          - [S3 >> CLI] `channel-protocol lacp`
+          - [S3 >> CLI] `channel-group 2 mode active`
+          - [S3 >> CLI] `no shut`
+          - [S3 >> CLI] `ex`
     - Créer les vlan:
       - Créer vlan 10, 20 et 30 sur chacun des switch:
         - S1 >> CLI:
           - [S1 >> CLI] `en`
           - [S1 >> CLI] `conf t`
-          - [S1 >> CLI] `vlan 10`
-          - [S1 >> CLI] `name ADMIN`
-          - [S1 >> CLI] `vlan 20`
-          - [S1 >> CLI] `name Utilisateurs`
-          - [S1 >> CLI] `vlan 30`
+          - créer vlan 10:
+            - [S1 >> CLI] `vlan 10`
+            - nommer vlan 10:
+              - [S1 >> CLI] `name ADMIN`
+          - créer vlan 20:
+            - [S1 >> CLI] `vlan 20`
+            - nommer vlan 20:
+              - [S1 >> CLI] `name Utilisateurs`
+          - créer vlan 30:
+            - [S1 >> CLI] `vlan 30`
           - [S1 >> CLI] `ex`
         - S2 >> CLI:
           - [S2 >> CLI] `en`
           - [S2 >> CLI] `conf t`
-          - [S2 >> CLI] `vlan 10`
-          - [S2 >> CLI] `name ADMIN`
-          - [S2 >> CLI] `vlan 20`
-          - [S2 >> CLI] `name Utilisateurs`
-          - [S2 >> CLI] `vlan 30`
+          - créer vlan 10:
+            - [S2 >> CLI] `vlan 10`
+            - nommer vlan 10:
+              - [S2 >> CLI] `name ADMIN`
+          - créer vlan 20:
+            - [S2 >> CLI] `vlan 20`
+            - nommer vlan 20:
+              - [S2 >> CLI] `name Utilisateurs`
+          - créer vlan 30:
+            - [S2 >> CLI] `vlan 30`
           - [S2 >> CLI] `ex`
         - S3 >> CLI:
-          - [S3 >> CLI] `en`
-          - [S3 >> CLI] `conf t`
-          - [S3 >> CLI] `vlan 10`
-          - [S3 >> CLI] `name ADMIN`
-          - [S3 >> CLI] `vlan 20`
-          - [S3 >> CLI] `name Utilisateurs`
-          - [S3 >> CLI] `vlan 30`
+            - [S3 >> CLI] `en`
+            - [S3 >> CLI] `conf t`
+          - créer vlan 10:
+            - [S3 >> CLI] `vlan 10`
+            - nommer vlan 10:
+              - [S3 >> CLI] `name ADMIN`
+          - créer vlan 20:
+            - [S3 >> CLI] `vlan 20`
+            - nommer vlan 20:
+              - [S3 >> CLI] `name Utilisateurs`
+          - créer vlan 30:
+            - [S3 >> CLI] `vlan 30`
           - [S3 >> CLI] `ex`
-     - Répartir les machines dans les Vlan 10, Vlan 20 et Vlan 30:
-        - Assigner PC0 à Vlan10:
-          - S1 >> CLI:
-            - [S1 >> CLI] `en`
-            - [S1 >> CLI] `conf t`
-            - [S1 >> CLI] `int f0/1`
-            - [S1 >> CLI] `switchport mode access`
-            - [S1 >> CLI] `switchport access vlan 10`
-            - [S1 >> CLI] `ex`
-        - Assigner PC1, PC2, PC3, PC4 à Vlan20:
-          - S1 >> CLI:
-            - [S1 >> CLI] `en`
-            - [S1 >> CLI] `conf t`
-            - [S1 >> CLI] `int range f0/2-3`
-            - [S1 >> CLI] `switchport mode access`
-            - [S1 >> CLI] `switchport access vlan 20`
-            - [S1 >> CLI] `ex`
-          - S2 >> CLI:
-            - [S2 >> CLI] `en`
-            - [S2 >> CLI] `conf t`
-            - [S2 >> CLI] `int range f0/1-2`
-            - [S2 >> CLI] `switchport mode access`
-            - [S2 >> CLI] `switchport access vlan 20`
-            - [S2 >> CLI] `ex`
-        - Assigner ServerDHCP à Vlan 30:
-          - S2 >> CLI:
-            - [S2 >> CLI] `en`
-            - [S2 >> CLI] `con f`
-            - [S2 >> CLI] `int f0/5`
-            - [S2 >> CLI] `switchport mode access`
-            - [S2 >> CLI] `switchport access vlan 30`
-            - [S2 >> CLI] `ex`
-        - Create, assign Ip/Subnet mask for vlan
-        - Configure dhcp server
-        - Configure mode access/trunk in vlan
-        - Tell PC in Vlans where to get ip
-        - Routing for multilayer switch
-        - Check
+    - Configurer les switchs dans le but de partager les vlan:
+      - S1 >> CLI:
+        - [S1 >> CLI] `int port-channel 1`
+        - [S1 >> CLI] `switch port trunk encapsulation dot1q`
+        - [S1 >> CLI] `switchport mode trunk`
+        - [S1 >> CLI] `switchport trunk allowed vlan 10, 20, 30`
+        - [S1 >> CLI] `no shut`
+        - [S1 >> CLI] `ex`
+      - S2 >> CLI:
+        - [S2 >> CLI] `int port-channel 1`
+        - [S2 >> CLI] `switch port trunk encapsulation dot1q`
+        - [S2 >> CLI] `switchport mode trunk`
+        - [S2 >> CLI] `switchport trunk allowed vlan 10, 20, 30`
+        - [S2 >> CLI] `no shut`
+        - [S2 >> CLI] `ex`
+      - S3 >> CLI:
+        - [S3 >> CLI] `int port-channel 1`
+        - [S3 >> CLI] `switch port trunk encapsulation dot1q`
+        - [S3 >> CLI] `switchport mode trunk`
+        - [S3 >> CLI] `switchport trunk allowed vlan 10, 20, 30`
+        - [S3 >> CLI] `no shut`
+        - [S3 >> CLI] `ex`
+    - Répartir les machines dans les Vlan 10, Vlan 20 et Vlan 30:
+      - Assigner PC0 à Vlan10:
+        - S1 >> CLI:
+          - [S1 >> CLI] `en`
+          - [S1 >> CLI] `conf t`
+          - [S1 >> CLI] `int f0/1`
+          - [S1 >> CLI] `switchport mode access`
+          - [S1 >> CLI] `switchport access vlan 10`
+          - [S1 >> CLI] `ex`
+      - Assigner PC1, PC2, PC3, PC4 à Vlan20:
+        - S1 >> CLI:
+          - [S1 >> CLI] `en`
+          - [S1 >> CLI] `conf t`
+          - [S1 >> CLI] `int range f0/2-3`
+          - [S1 >> CLI] `switchport mode access`
+          - [S1 >> CLI] `switchport access vlan 20`
+          - [S1 >> CLI] `ex`
+        - S2 >> CLI:
+          - [S2 >> CLI] `en`
+          - [S2 >> CLI] `conf t`
+          - [S2 >> CLI] `int range f0/1-2`
+          - [S2 >> CLI] `switchport mode access`
+          - [S2 >> CLI] `switchport access vlan 20`
+          - [S2 >> CLI] `ex`
+      - Assigner ServerDHCP à Vlan 30:
+        - S2 >> CLI:
+          - [S2 >> CLI] `en`
+          - [S2 >> CLI] `con f`
+          - [S2 >> CLI] `int f0/5`
+          - [S2 >> CLI] `switchport mode access`
+          - [S2 >> CLI] `switchport access vlan 30`
+          - [S2 >> CLI] `ex`
+      - Create, assign Ip/Subnet mask for vlan
+      - Configure dhcp server
+      - Configure mode access/trunk in vlan
+      - Tell PC in Vlans where to get ip
+      - Routing for multilayer switch
+      - Check
 
     
