@@ -164,6 +164,12 @@ Exercice:
         - [S1 >> CLI] `switchport trunk allowed vlan 10, 20, 30`
         - [S1 >> CLI] `no shut`
         - [S1 >> CLI] `ex`
+        - [S1 >> CLI] `int port-channel 2`
+        - [S1 >> CLI] `switch port trunk encapsulation dot1q`
+        - [S1 >> CLI] `switchport mode trunk`
+        - [S1 >> CLI] `switchport trunk allowed vlan 10, 20, 30`
+        - [S1 >> CLI] `no shut`
+        - [S1 >> CLI] `ex`
       - S2 >> CLI:
         - [S2 >> CLI] `int port-channel 1`
         - [S2 >> CLI] `switch port trunk encapsulation dot1q`
@@ -171,8 +177,20 @@ Exercice:
         - [S2 >> CLI] `switchport trunk allowed vlan 10, 20, 30`
         - [S2 >> CLI] `no shut`
         - [S2 >> CLI] `ex`
+        - [S1 >> CLI] `int port-channel 3`
+        - [S1 >> CLI] `switch port trunk encapsulation dot1q`
+        - [S1 >> CLI] `switchport mode trunk`
+        - [S1 >> CLI] `switchport trunk allowed vlan 10, 20, 30`
+        - [S1 >> CLI] `no shut`
+        - [S1 >> CLI] `ex`
       - S3 >> CLI:
-        - [S3 >> CLI] `int port-channel 1`
+        - [S3 >> CLI] `int port-channel 2`
+        - [S3 >> CLI] `switch port trunk encapsulation dot1q`
+        - [S3 >> CLI] `switchport mode trunk`
+        - [S3 >> CLI] `switchport trunk allowed vlan 10, 20, 30`
+        - [S3 >> CLI] `no shut`
+        - [S3 >> CLI] `ex`
+        - [S3 >> CLI] `int port-channel 3`
         - [S3 >> CLI] `switch port trunk encapsulation dot1q`
         - [S3 >> CLI] `switchport mode trunk`
         - [S3 >> CLI] `switchport trunk allowed vlan 10, 20, 30`
