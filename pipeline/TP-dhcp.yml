@@ -48,11 +48,10 @@ Exercice:
           - [Router0 >> Services >> DHCP] Service on
           - [Router0 >> Services >> DHCP] Gateway `0.0.0.0`
           - [Router0 >> Services >> DHCP] Start IP Address `192.168.0.2` `255.255.255.0`
-    - Connecter le PC (PC0):
-      - **Objectif, obtenir une ip automatiquement**:
-        - [Menu] Desktop >> IP configuration
-        - [Action] Toggle DHCP/Static
-  
+  - Re-connecter PC0:
+    - **Objectif, obtenir une ip automatiquement**:
+      - [Menu] Desktop >> IP configuration
+      - [Action] Toggle DHCP/Static
   
 Trouble shooting:
   - `do sh int brief`
