@@ -59,6 +59,6 @@ Exercice:
   
 Trouble shooting:
   - Router0 >> CLI:
-    - `en`
-    - `sh int brief`
+    - [Router0 >> CLI] `en`
+    - [Router0 >> CLI] `sh int brief`
   - re-démarrer packet tracer
