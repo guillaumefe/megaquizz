@@ -23,8 +23,6 @@ Exercice:
     - PC0 (fa0) --> Routeur (fa/00)
     - Routeur(fa0/1) --> DHCP(fa0)
   - Configurer:
-    - Configurer le switch Switch0:
-      - Aucune configuration nécessaire sur le switch Swich0
     - Configurer le routeur Router0:
         - Configurer l'interface f0/1 du routeur Router0 (coté Serveur DHCP):
           - Router0 >> Config:
