@@ -1,4 +1,9 @@
-#TP
+Objectif: |
+  Obtenir l'attribution automatique d'une adresse ip via DHCP depuis un ordinateur branché au réseau
+  Le routeur doit transmettre automatiquement les requêtes DHCP vers le serveur situé sur un autre réseau que l'ordinateur,
+  grâce à la commande `ip helper-address [ip du serveur DHCP]`
+  
+---
 
 Exercice:
   - Préparer le workspace Cisco:
