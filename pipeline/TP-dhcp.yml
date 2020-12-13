@@ -119,6 +119,11 @@ Exercice:
       - Passer en mode Realtime:
         - Accélérer le temps
   - **Tester**:
+    - Passer PC0 en mode DHCP:
+      - Passer en mode Simulation
+      - [PC1 >> Desktop >> IP configuration] Toggle Static --> DHCP pour déclencher une requête DHCP (action physique de l'utilisataur) 
+      - Observer l'enchainement des paquets jusqu'à ce que PC1 obtienne une IP dans le range spécifié par le serveur DHCP
+      - Re-passer en mode Realtime
     - Passer PC1 en mode DHCP:
       - Passer en mode Simulation
       - [PC1 >> Desktop >> IP configuration] Toggle Static --> DHCP pour déclencher une requête DHCP (action physique de l'utilisataur) 
@@ -130,6 +135,8 @@ Exercice:
 
           
 Trouble shooting:
+  - Observer l'Event List du Simulation Panel gauche:
+    - cliquer sur un paquet, puis `next layer` jusqu'à la fin de la trame pour observer d'eventuelles erreurs
   - Router0 >> CLI:
     - [Router0 >> CLI] `en`
     - [Router0 >> CLI] `sh run`
