@@ -60,5 +60,7 @@ Exercice:
 Trouble shooting:
   - Router0 >> CLI:
     - [Router0 >> CLI] `en`
-    - [Router0 >> CLI] `sh int brief`
+    - [Router0 >> CLI] `sh run`
+  - accélérer le temps
   - re-démarrer packet tracer
+
