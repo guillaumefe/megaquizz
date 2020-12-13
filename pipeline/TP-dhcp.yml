@@ -1,5 +1,5 @@
 Objectif: |
-  Obtenir l'attribution automatique d'une adresse ip via DHCP depuis un ordinateur branché au réseau
+  Obtenir l'attribution automatique d'une adresse ip via DHCP depuis plusieurs ordinateur derrière un switch branché au réseau
   Le routeur doit transmettre automatiquement les requêtes DHCP vers le serveur situé sur un autre réseau que l'ordinateur,
   grâce à la commande `ip helper-address [ip du serveur DHCP]`
   
@@ -14,7 +14,7 @@ Exercice:
   - Préparer les éléments:
     - Router:
       - 2811:
-        - Ajouter un routeur 2811 nommé router0
+        - Ajouter un routeur 2811 nommé Router0
     - Serveur:
       - Ajouter un serveur nommé DHCP
     - Machine:
@@ -23,8 +23,10 @@ Exercice:
     - PC0 (fa0) --> Routeur (fa/00)
     - Routeur(fa0/1) --> DHCP(fa0)
   - Configurer:
-    - Configurer le routeur router0:
-        - Configurer l'interface f0/1 du routeur router0 (coté Serveur DHCP):
+    - Configurer le switch Switch0:
+      - Aucune configuration nécessaire sur le switch Swich0
+    - Configurer le routeur Router0:
+        - Configurer l'interface f0/1 du routeur Router0 (coté Serveur DHCP):
           - Router0 >> Config:
             - [Router0 >> Config >> FastEthernet0/1] Port Status on
             - Ip :
@@ -34,7 +36,7 @@ Exercice:
             - [Router0 >> CLI] `conf t`
             - [Router0 >> CLI] `int f0/1`
             - [Router0 >> CLI] `ip helper-address 192.168.1.2` #ip helper-adress first occurence
-        - Configurer l'interface fa0/0 du routeur router0 (coté PC0):
+        - Configurer l'interface fa0/0 du routeur Router0 (coté PC0):
           - Router0 >> Config:
             - [Router0 >> Config >> FastEthernet0/0] Port Status on
             - Ip:
@@ -53,14 +55,78 @@ Exercice:
           - [DHCP >> Services >> DHCP] Service on
           - [DHCP >> Services >> DHCP] Gateway `0.0.0.0`
           - [DHCP >> Services >> DHCP] Start IP Address `192.168.0.2` `255.255.255.0`
-  - Re-connecter PC0:
-    - **Objectif, obtenir une ip automatiquement**:
-      - [PC0 >> Desktop >> IP configuration] (action utilisataur) Toggle DHCP --> Static --> DHCP pour déclencher une requête DHCP
-  
+  - **Tester**:
+    - Passer PC0 en mode DHCP:
+      - Passer en mode Simulation
+      - [PC0 >> Desktop >> IP configuration] Toggle Static --> DHCP pour déclencher une requête DHCP (action physique de l'utilisataur) 
+      - Observer l'enchainement des paquets jusqu'à ce que PC0 obtienne une IP dans le range spécifié par le serveur DHCP
+      - Re-passer en mode Realtime
+  - Ajouter un switch:
+    - Switch:
+      - 2960:
+        - Ajouter un switch 2960 nommé Switch0
+        - Re-créer les liaisons:
+          - PC0 (fa0) --> Switch0 (fa0/1)
+          - Routeur (fa/00) —> Switch0 (fa0/24)
+          - Routeur(fa0/1) --> DHCP(fa0)
+    - Passer en mode Realtime:
+      - Accélérer le temps
+  - **Tester**:
+    - Passer PC0 en mode DHCP:
+      - Passer en mode Simulation
+      - [PC0 >> Desktop >> IP configuration] Toggle Static --> DHCP pour déclencher une requête DHCP (action physique de l'utilisataur) 
+      - Observer l'enchainement des paquets jusqu'à ce que PC0 obtienne une IP dans le range spécifié par le serveur DHCP
+      - Re-passer en mode Realtime
+  - Ajouter une machine:
+    - Ajouter un PC nommé PC1
+    - PC1 (fa0) --> Switch0 (fa0/2)
+  - **Tester**:
+    - Passer PC1 en mode DHCP:
+      - Passer en mode Simulation
+      - [PC1 >> Desktop >> IP configuration] Toggle Static --> DHCP pour déclencher une requête DHCP (action physique de l'utilisataur) 
+      - Observer l'enchainement des paquets jusqu'à ce que PC1 obtienne une IP dans le range spécifié par le serveur DHCP
+      - Re-passer en mode Realtime
+  - Séparer les ordinateurs dans des vlan distincts:
+    - Switch >> CLI:
+      - `en`
+      - `conf t`
+      - PC0:
+        - `vlan 10`
+        - `int fa0/1`
+        - `sw mode access`
+        - `sw access vlan 10`
+        - `exit`
+      - PC1:
+        - `vlan 20`
+        - `int fa0/2`
+        - `sw mode access`
+        - `sw access vlan 20`
+        - `exit`
+      - Passer le switch en mode trunk:
+        - `int fa0/24`
+        - `sw mode trunk`
+        - `sw trunk allowed vlan 10,20`
+      - Passer le routeur en mode trunk:
+        - `interface fa0/0`
+        - `no ip address`
+        - `no shut`
+        - `interface Fa0/0.10`
+        - `encapsulation dot1q 10`
+        - `ip helper-address 192.168.1.2`
+        - `exit`
+        - `interface Fa0/0.20`
+        - `encapsulation dot1q 20`
+        - `ip helper-address 192.168.1.2`
+        - `exit`
+      - Passer en mode Realtime:
+        - Accélérer le temps
+      - Erreur à corriger:
+        - Le premier paquet de requête DHCP arrive bien jusqu'au serveur qui ne renvoit rien:
+          - The DHCP server does not have a pool configured for the received port. It drops the packet.
+          
 Trouble shooting:
   - Router0 >> CLI:
     - [Router0 >> CLI] `en`
     - [Router0 >> CLI] `sh run`
   - accélérer le temps
   - re-démarrer packet tracer
-
