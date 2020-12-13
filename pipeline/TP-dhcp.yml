@@ -47,7 +47,7 @@ Exercice:
     - Configurer le serveur DHCP:
       - Configurer l'interface f0 du serveur DHCP:
         - Router0 >> Config:
-          - [DHCP >> Config >> FastEthernet0 >> IP Configuration] `192.168.1.2` `255.255.255.0`, gateway `192.168.1.1`
+          - [DHCP >> Desktop >> IP Configuration] `192.168.1.2` `255.255.255.0`, gateway `192.168.1.1`
       - Démarrer le service DHCP:
         - Service >> DHCP:
           - [DHCP >> Services >> DHCP] Service on
