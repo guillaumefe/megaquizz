@@ -148,11 +148,6 @@ Exercice:
       - [PC1 >> Desktop >> IP configuration] Toggle Static --> DHCP pour déclencher une requête DHCP (action physique de l'utilisateur) 
       - Observer l'enchainement des paquets jusqu'à ce que PC1 obtienne une IP dans le range spécifié par le serveur DHCP (exemple, 172.16.10.2)
       - Re-passer en mode Realtime
-  - **Test succeed 7/8**:
-    - **Test failed 1/8***:
-      - L'ip attribuée à PC1 devrait être `172.16.10.2/16` mais elle est à `172.16.10.2/24`
-    - Résolution:
-      - ?
 
 Trouble shooting:
   - Observer l'Event List du Simulation Panel gauche:
