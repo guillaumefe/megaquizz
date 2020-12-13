@@ -84,7 +84,7 @@ Exercice:
       - [PC1 >> Desktop >> IP configuration] Toggle Static --> DHCP pour déclencher une requête DHCP (action physique de l'utilisataur) 
       - Observer l'enchainement des paquets jusqu'à ce que PC1 obtienne une IP dans le range spécifié par le serveur DHCP
       - Re-passer en mode Realtime
-  - Séparer les ordinateurs dans des vlan distincts:
+  - Répartir les ordinateurs dans des vlan distincts:
     - Switch >> CLI:
       - `en`
       - `conf t`
@@ -118,9 +118,16 @@ Exercice:
         - `exit`
       - Passer en mode Realtime:
         - Accélérer le temps
-      - Erreur à corriger:
-        - Le premier paquet de requête DHCP arrive bien jusqu'au serveur qui ne renvoit rien:
-          - The DHCP server does not have a pool configured for the received port. It drops the packet.
+  - **Tester**:
+    - Passer PC1 en mode DHCP:
+      - Passer en mode Simulation
+      - [PC1 >> Desktop >> IP configuration] Toggle Static --> DHCP pour déclencher une requête DHCP (action physique de l'utilisataur) 
+      - Observer l'enchainement des paquets jusqu'à ce que PC1 obtienne une IP dans le range spécifié par le serveur DHCP:
+        - Erreur à corriger:
+          - Le premier paquet de requête DHCP arrive bien jusqu'au serveur qui ne renvoit rien:
+            - The DHCP server does not have a pool configured for the received port. It drops the packet.
+      - Re-passer en mode Realtime
+
           
 Trouble shooting:
   - Router0 >> CLI:
