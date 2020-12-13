@@ -20,8 +20,8 @@ Exercice:
     - Machine:
       - Ajouter un PC nommé PC0
   - Établir les liaisons:
-    - PC0 (fa0) --> Routeur (fa/00)
-    - Routeur(fa0/1) --> DHCP(fa0)
+    - Ajouter la liaison PC0 (fa0) --> Routeur (fa/00)
+    - Ajouter la liaison Routeur(fa0/1) --> DHCP(fa0)
   - Configurer:
     - Configurer le routeur Router0:
         - Configurer l'interface f0/1 du routeur Router0 (coté Serveur DHCP):
@@ -64,9 +64,9 @@ Exercice:
       - 2960:
         - Ajouter un switch 2960 nommé Switch0
         - Re-créer les liaisons:
-          - PC0 (fa0) --> Switch0 (fa0/1)
-          - Routeur (fa/00) —> Switch0 (fa0/24)
-          - Routeur(fa0/1) --> DHCP(fa0)
+          - Supprimer la liaison PC0 (fa0) --> Routeur (fa/00)
+          - Ajouter la liaison PC0 (fa0) --> Switch0 (fa0/1)
+          - Ajouter la liaison Routeur (fa/00) —> Switch0 (fa0/24)
     - Passer en mode Realtime:
       - Accélérer le temps
   - **Tester**:
@@ -77,7 +77,8 @@ Exercice:
       - Re-passer en mode Realtime
   - Ajouter une machine:
     - Ajouter un PC nommé PC1
-    - PC1 (fa0) --> Switch0 (fa0/2)
+    - Créer la liaison:
+      - Ajouter la liaison PC1 (fa0) --> Switch0 (fa0/2)
   - **Tester**:
     - Passer PC1 en mode DHCP:
       - Passer en mode Simulation
