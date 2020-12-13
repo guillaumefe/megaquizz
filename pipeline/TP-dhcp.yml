@@ -121,6 +121,30 @@ Exercice:
   - **Tester**:
     - Passer PC0 en mode DHCP:
       - Passer en mode Simulation
+      - [PC0 >> Desktop >> IP configuration] Toggle Static --> DHCP pour déclencher une requête DHCP (action physique de l'utilisataur) 
+      - Observer l'enchainement des paquets jusqu'à ce que PC1 obtienne une IP dans le range spécifié par le serveur DHCP:
+        - Erreur à corriger:
+          - Le premier paquet de requête DHCP arrive bien jusqu'au serveur qui ne renvoit rien:
+            - The DHCP server does not have a pool configured for the received port. It drops the packet.
+      - Re-passer en mode Realtime
+    - Passer PC1 en mode DHCP:
+      - Passer en mode Simulation
+      - [PC1 >> Desktop >> IP configuration] Toggle Static --> DHCP pour déclencher une requête DHCP (action physique de l'utilisataur) 
+      - Observer l'enchainement des paquets jusqu'à ce que PC1 obtienne une IP dans le range spécifié par le serveur DHCP:
+        - Erreur à corriger:
+          - Le premier paquet de requête DHCP arrive bien jusqu'au serveur qui ne renvoit rien:
+            - The DHCP server does not have a pool configured for the received port. It drops the packet.
+        - Re-passer en mode Realtime
+  - **Test failed**
+  - **Résolution**:
+    - Addressage de l'interface Fa0/0.10 sur le routeur:
+      - Router >> CLI:
+        - [Router >> CLI] `en`
+        - [Router >> CLI] `conf t`
+        - [Router >> CLI] int fa0/0.10`
+        - [Router >> CLI] `ip address 192.168.0.42 255.255.255.0`
+    - Passer PC0 en mode DHCP:
+      - Passer en mode Simulation
       - [PC1 >> Desktop >> IP configuration] Toggle Static --> DHCP pour déclencher une requête DHCP (action physique de l'utilisataur) 
       - Observer l'enchainement des paquets jusqu'à ce que PC1 obtienne une IP dans le range spécifié par le serveur DHCP
       - Re-passer en mode Realtime
@@ -131,9 +155,9 @@ Exercice:
         - Erreur à corriger:
           - Le premier paquet de requête DHCP arrive bien jusqu'au serveur qui ne renvoit rien:
             - The DHCP server does not have a pool configured for the received port. It drops the packet.
-      - Re-passer en mode Realtime
+- **Test failed 1/2**
 
-          
+
 Trouble shooting:
   - Observer l'Event List du Simulation Panel gauche:
     - cliquer sur un paquet, puis `next layer` jusqu'à la fin de la trame pour observer d'eventuelles erreurs
