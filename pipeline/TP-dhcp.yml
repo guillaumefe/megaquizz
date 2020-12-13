@@ -47,12 +47,12 @@ Exercice:
     - Configurer le serveur DHCP:
       - Configurer l'interface f0 du serveur DHCP:
         - Router0 >> Config:
-          - [Router0 >> Config >> FastEthernet0 >> IP Configuration] `192.168.1.2` `255.255.255.0`, gateway `192.168.1.1`
+          - [DHCP >> Config >> FastEthernet0 >> IP Configuration] `192.168.1.2` `255.255.255.0`, gateway `192.168.1.1`
       - Démarrer le service DHCP:
         - Service >> DHCP:
-          - [Router0 >> Services >> DHCP] Service on
-          - [Router0 >> Services >> DHCP] Gateway `0.0.0.0`
-          - [Router0 >> Services >> DHCP] Start IP Address `192.168.0.2` `255.255.255.0`
+          - [DHCP >> Services >> DHCP] Service on
+          - [DHCP >> Services >> DHCP] Gateway `0.0.0.0`
+          - [DHCP >> Services >> DHCP] Start IP Address `192.168.0.2` `255.255.255.0`
   - Re-connecter PC0:
     - **Objectif, obtenir une ip automatiquement**:
       - [PC0 >> Desktop >> IP configuration] (action utilisataur) Toggle DHCP --> Static --> DHCP pour déclencher une requête DHCP
