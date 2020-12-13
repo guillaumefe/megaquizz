@@ -49,7 +49,7 @@ Exercice:
         - Router0 >> Config:
           - [DHCP >> Desktop >> IP Configuration] `192.168.1.2` `255.255.255.0`, gateway `192.168.1.1`
       - Démarrer le service DHCP:
-        - Service >> DHCP:
+        - DHCP >> Service >> DHCP:
           - [DHCP >> Services >> DHCP] Service on
           - [DHCP >> Services >> DHCP] Gateway `0.0.0.0`
           - [DHCP >> Services >> DHCP] Start IP Address `192.168.0.2` `255.255.255.0`
@@ -118,45 +118,38 @@ Exercice:
         - `exit`
       - Passer en mode Realtime:
         - Accélérer le temps
+  - Créer 1 pool d'adresse DHCP par vlan:
+        - vlan 10:
+          - DHCP >> Service >> DHCP:
+            - [DHCP >> Services >> DHCP] Pool name Pool1
+            - [DHCP >> Services >> DHCP] Start IP Address `192.168.10.2` `255.255.255.0`
+        - vlan 20:
+          - DHCP >> Service >> DHCP:
+            - [DHCP >> Services >> DHCP] Pool name Pool2
+            - [DHCP >> Services >> DHCP] Start IP Address `172.16.10.2` `255.255.0.0`
+  - Donner des IP aux sous-interfaces vlan du routeur:
+    - Switch >> CLI:
+      - `en`
+      - `conf t`
+      - `interface Fa0/0.10`
+      - `ip address 192.168.10.1 255.255.255.0`
+      - `interface Fa0/0.20`
+      - `ip address 172.16.10.1 255.255.0.0`
   - **Tester**:
     - Passer PC0 en mode DHCP:
       - Passer en mode Simulation
       - [PC0 >> Desktop >> IP configuration] Toggle Static --> DHCP pour déclencher une requête DHCP (action physique de l'utilisataur) 
-      - Observer l'enchainement des paquets jusqu'à ce que PC1 obtienne une IP dans le range spécifié par le serveur DHCP:
-        - Erreur à corriger:
-          - Le premier paquet de requête DHCP arrive bien jusqu'au serveur qui ne renvoit rien:
-            - The DHCP server does not have a pool configured for the received port. It drops the packet.
+      - Observer l'enchainement des paquets jusqu'à ce que PC0 obtienne une IP dans le range spécifié par le serveur DHCP (exemple, 192.168.10.2)
       - Re-passer en mode Realtime
     - Passer PC1 en mode DHCP:
       - Passer en mode Simulation
       - [PC1 >> Desktop >> IP configuration] Toggle Static --> DHCP pour déclencher une requête DHCP (action physique de l'utilisataur) 
-      - Observer l'enchainement des paquets jusqu'à ce que PC1 obtienne une IP dans le range spécifié par le serveur DHCP:
-        - Erreur à corriger:
-          - Le premier paquet de requête DHCP arrive bien jusqu'au serveur qui ne renvoit rien:
-            - The DHCP server does not have a pool configured for the received port. It drops the packet.
-        - Re-passer en mode Realtime
-  - **Test failed**
-  - **Résolution**:
-    - Addressage de l'interface Fa0/0.10 sur le routeur:
-      - Router >> CLI:
-        - [Router >> CLI] `en`
-        - [Router >> CLI] `conf t`
-        - [Router >> CLI] int fa0/0.10`
-        - [Router >> CLI] `ip address 192.168.0.42 255.255.255.0`
-    - Passer PC0 en mode DHCP:
-      - Passer en mode Simulation
-      - [PC1 >> Desktop >> IP configuration] Toggle Static --> DHCP pour déclencher une requête DHCP (action physique de l'utilisataur) 
-      - Observer l'enchainement des paquets jusqu'à ce que PC1 obtienne une IP dans le range spécifié par le serveur DHCP
+      - Observer l'enchainement des paquets jusqu'à ce que PC1 obtienne une IP dans le range spécifié par le serveur DHCP (exemple, 172.16.10.2)
       - Re-passer en mode Realtime
-    - Passer PC1 en mode DHCP:
-      - Passer en mode Simulation
-      - [PC1 >> Desktop >> IP configuration] Toggle Static --> DHCP pour déclencher une requête DHCP (action physique de l'utilisataur) 
-      - Observer l'enchainement des paquets jusqu'à ce que PC1 obtienne une IP dans le range spécifié par le serveur DHCP:
-        - Erreur à corriger:
-          - Le premier paquet de requête DHCP arrive bien jusqu'au serveur qui ne renvoit rien:
-            - The DHCP server does not have a pool configured for the received port. It drops the packet.
-- **Test failed 1/2**
-
+  - **Test failed 1/8***:
+    - L'ip attribuée à PC1 devrait être `172.16.10.2/16` mais elle est à `172.16.10.2/24`
+  - Résolution:
+    - ?
 
 Trouble shooting:
   - Observer l'Event List du Simulation Panel gauche:
