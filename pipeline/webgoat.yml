@@ -1,23 +1,29 @@
-Objectif : faire tourner webgoat
+Objectif : démarrer webgoat
 ---
 
-- faire tourner webgoat:
+- démarrer webgoat:
 
   - dependencies:
-    - kali linux:
+    - windows users seulement:
       - télécharger virtualbox ou vmware
-      - télécharger la dernière version de kali linux
-      - booter l'outil de virtualisation
-    - docker:
-      - s’assurer que docker est installé:
-        - `docker --version`
+      - télécharger GNU/Linux (toute distribution)
+      - booter GNU/Linux
+    - s’assurer que docker est installé:
+      - `docker --version`
+      - sinon:
+        - [OSX] `brew update && brew install docker`
+        - ou
+        - [Debian/Ubuntu] `sudo apt-get update && sudo apt-get install docker`
         
   - start service:
-    - lancer le service webgoat:
-      - `docker pull webgoat/webgoat-8.0 && docker run -p 8080:8080 -t webgoat/webgoat-8.0`
+    - dans GNU/Linux ou OSX:
+      - ouvrir un terminal
+      - lancer le service webgoat:
+        - `docker pull webgoat/webgoat-8.0 && docker run -p 8080:8080 -t webgoat/webgoat-8.0`
       
   - test && usage:
-    - ouvrir http://127.0.0.1:8080/WebGoat dans un navigateur
-    - créer un compte
-    - se connecter
-    - lancer un tutoriel via le panel de gauche
+    - ouvrir http://127.0.0.1:8080/WebGoat dans un navigateur depuis un PC du LAN
+    - interface web de WebGoat:
+      - créer un compte
+      - se connecter
+      - lancer la série de tutoriels via le panel de gauche
