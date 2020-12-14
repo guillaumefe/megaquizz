@@ -1,238 +1,124 @@
-Objectif: |
-  Mettre en place un serveur DHCP dans le Vlan30 puis lui faire 
-  délivrer des adresses IP aux autres machines du réseau (Vlan 10 et Vlan 20 inclus).
-  Est-ce-possible?
-  
-  Implémentation de référence: https://cdn.discordapp.com/attachments/780779054243905589/786971735886659614/Archi_v1.5_MiseEnPlaceDHCP.pkt
-  
----
-  
-Exercice:
-  - Préparer le workspace Cisco:
-    - ouvrir Packet Tracer
-    - Packet Tracer:
-      - File >> New
-      - File >> Save as `v1.5-mepDHCP.pkt`
-  - Préparer les éléments:
-    - Switch:
-      - 3560:
-        - Ajouter un switch 3560 nommé S1
-        - Ajouter un switch 3560 nommé S2
-        - Ajouter un switch 3560 nommé S3
-      - Relier les swich entre eux:
-        - Relier S1 (g0/1) --> S2 (g0/1) (cable copper)
-        - Relier S1 (g0/2) --> S2 (g0/2) (cable copper)
-        - Relier S2 (f0/3) --> S3 (f0/3) (cable copper)
-        - Relier S2 (f0/4) --> S3 (f0/4) (cable copper)
-        - Relier S3 (f0/1) --> S1 (f0/4) (cable copper)
-        - Relier S3 (f0/2) --> S1 (f0/5) (cable copper)
-    - Serveur:
-      - Ajouter un serveur DHCP:
-        - Ajouter un serveur nommé ServerDHCP
-        - Configurer ServerDHCP:
-          - ip:
-            - réseau: 192.168.30.0
-            - masque: 255.255.255.0
-            - range ip:
-              - min: 2
-              - max: 99
-        - Connecter le serveur DHCP au réseau de switch:
-          - Relier ServerDHCP (Fa0) --> S2 (Fa0/5)
-        - Adresser manuellement ServerDHCP:
-          - Donner l'adresse 192.168.30.1/24 à ServerDHCP
-    - Routeur:
-      - 2811:
-        - Ajouter un routeur 2811 nommé Router0
-        - Connecter le routeur au réseau de switch:
-          - Relier Router0 (Fa0) --> S3 (Fa0/24)
-        - Adresser manuellement Router0:
-          - Donner l'adresse 172.16.10.1/16 à Router0:
-            - Router0 >> CLI:
-              - [Router0 >> CLI] `en`
-              - [Router0 >> CLI] `conf t`
-              - [Router0 >> CLI] `int fa0/0`
-              - [Router0 >> CLI] `ip address 172.16.10.1 255.255.0.0`
-    - Machines:
-      - Ajouter des ordinateurs:
-        - Ajouter un ordinateur nommé PC0
-        - Ajouter un ordinateur nommé PC1
-        - Ajouter un ordinateur nommé PC2
-        - Ajouter un ordinateur nommé PC3
-        - Ajouter un ordinateur nommé PC4
-      - Relier les ordinateurs au réseau de switch:
-        - Relier PC0 (Fa0) --> S1 (Fa0/1)
-        - Relier PC1 (Fa0) --> S1 (Fa0/2)
-        - Relier PC2 (Fa0) --> S1 (Fa0/3)
-        - Relier PC3 (Fa0) --> S2 (Fa0/1)
-        - Relier PC4 (Fa0) --> S2 (Fa0/2)
-  - Configurer le réseau:
-    - Configurer l'ether-channel:
-      - S1 >> CLI:
-        - [S1 >> CLI] `en`
-        - [S1 >> CLI] `conf t`
-        - configurer interface vers S2:
-          - [S1 >> CLI] `int range g0/1-2`
-          - [S1 >> CLI] `channel-protocol lacp`
-          - [S1 >> CLI] `channel-group 1 mode active`
-          - [S1 >> CLI] `no shut`
-          - [S1 >> CLI] `ex`
-        - configurer interface vers S3:
-          - [S1 >> CLI] `int range f0/4-5`
-          - [S1 >> CLI] `channel-protocol lacp`
-          - [S1 >> CLI] `channel-group 2 mode passive`
-          - [S1 >> CLI] `no shut`
-          - [S1 >> CLI] `ex`
-      - S2 >> CLI:
-        - [S2 >> CLI] `en`
-        - [S2 >> CLI] `conf t`
-        - configurer interface vers S1:
-          - [S2 >> CLI] `int range g0/1-2`
-          - [S2 >> CLI] `channel-protocol lacp`
-          - [S2 >> CLI] `channel-group 1 mode passive`
-          - [S2 >> CLI] `no shut`
-          - [S2 >> CLI] `ex`
-        - configurer interface vers S3:
-          - [S2 >> CLI] `int range f0/3-4`
-          - [S2 >> CLI] `channel-protocol lacp`
-          - [S2 >> CLI] `channel-group 3 mode active`
-          - [S2 >> CLI] `no shut`
-          - [S2 >> CLI] `ex`
-      - S3 >> CLI:
-        - [S3 >> CLI] `en`
-        - [S3 >> CLI] `conf t`
-        - configurer interface vers S2:
-          - [S3 >> CLI] `int range f0/3-4`
-          - [S3 >> CLI] `channel-protocol lacp`
-          - [S3 >> CLI] `channel-group 3 mode passive`
-          - [S3 >> CLI] `no shut`
-          - [S3 >> CLI] `ex`
-        - configurer interface vers S1:
-          - [S3 >> CLI] `int range f0/1-2`
-          - [S3 >> CLI] `channel-protocol lacp`
-          - [S3 >> CLI] `channel-group 2 mode active`
-          - [S3 >> CLI] `no shut`
-          - [S3 >> CLI] `ex`
-    - Créer les vlan:
-      - Créer vlan 10, 20 et 30 sur chacun des switch:
-        - S1 >> CLI:
-          - [S1 >> CLI] `en`
-          - [S1 >> CLI] `conf t`
-          - créer vlan 10:
-            - [S1 >> CLI] `vlan 10`
-            - nommer vlan 10:
-              - [S1 >> CLI] `name ADMIN`
-          - créer vlan 20:
-            - [S1 >> CLI] `vlan 20`
-            - nommer vlan 20:
-              - [S1 >> CLI] `name Utilisateurs`
-          - créer vlan 30:
-            - [S1 >> CLI] `vlan 30`
-          - [S1 >> CLI] `ex`
-        - S2 >> CLI:
-          - [S2 >> CLI] `en`
-          - [S2 >> CLI] `conf t`
-          - créer vlan 10:
-            - [S2 >> CLI] `vlan 10`
-            - nommer vlan 10:
-              - [S2 >> CLI] `name ADMIN`
-          - créer vlan 20:
-            - [S2 >> CLI] `vlan 20`
-            - nommer vlan 20:
-              - [S2 >> CLI] `name Utilisateurs`
-          - créer vlan 30:
-            - [S2 >> CLI] `vlan 30`
-          - [S2 >> CLI] `ex`
-        - S3 >> CLI:
-            - [S3 >> CLI] `en`
-            - [S3 >> CLI] `conf t`
-          - créer vlan 10:
-            - [S3 >> CLI] `vlan 10`
-            - nommer vlan 10:
-              - [S3 >> CLI] `name ADMIN`
-          - créer vlan 20:
-            - [S3 >> CLI] `vlan 20`
-            - nommer vlan 20:
-              - [S3 >> CLI] `name Utilisateurs`
-          - créer vlan 30:
-            - [S3 >> CLI] `vlan 30`
-          - [S3 >> CLI] `ex`
-    - Partager les vlan entre les switch:
-      - S1 >> CLI:
-        - [S1 >> CLI] `int port-channel 1`
-        - [S1 >> CLI] `switch port trunk encapsulation dot1q`
-        - [S1 >> CLI] `switchport mode trunk`
-        - [S1 >> CLI] `switchport trunk allowed vlan 10, 20, 30`
-        - [S1 >> CLI] `no shut`
-        - [S1 >> CLI] `ex`
-        - [S1 >> CLI] `int port-channel 2`
-        - [S1 >> CLI] `switch port trunk encapsulation dot1q`
-        - [S1 >> CLI] `switchport mode trunk`
-        - [S1 >> CLI] `switchport trunk allowed vlan 10, 20, 30`
-        - [S1 >> CLI] `no shut`
-        - [S1 >> CLI] `ex`
-      - S2 >> CLI:
-        - [S2 >> CLI] `int port-channel 1`
-        - [S2 >> CLI] `switch port trunk encapsulation dot1q`
-        - [S2 >> CLI] `switchport mode trunk`
-        - [S2 >> CLI] `switchport trunk allowed vlan 10, 20, 30`
-        - [S2 >> CLI] `no shut`
-        - [S2 >> CLI] `ex`
-        - [S1 >> CLI] `int port-channel 3`
-        - [S1 >> CLI] `switch port trunk encapsulation dot1q`
-        - [S1 >> CLI] `switchport mode trunk`
-        - [S1 >> CLI] `switchport trunk allowed vlan 10, 20, 30`
-        - [S1 >> CLI] `no shut`
-        - [S1 >> CLI] `ex`
-      - S3 >> CLI:
-        - [S3 >> CLI] `int port-channel 2`
-        - [S3 >> CLI] `switch port trunk encapsulation dot1q`
-        - [S3 >> CLI] `switchport mode trunk`
-        - [S3 >> CLI] `switchport trunk allowed vlan 10, 20, 30`
-        - [S3 >> CLI] `no shut`
-        - [S3 >> CLI] `ex`
-        - [S3 >> CLI] `int port-channel 3`
-        - [S3 >> CLI] `switch port trunk encapsulation dot1q`
-        - [S3 >> CLI] `switchport mode trunk`
-        - [S3 >> CLI] `switchport trunk allowed vlan 10, 20, 30`
-        - [S3 >> CLI] `no shut`
-        - [S3 >> CLI] `ex`
-    - Répartir les machines dans les Vlan 10, Vlan 20 et Vlan 30:
-      - Assigner PC0 à Vlan10:
-        - S1 >> CLI:
-          - [S1 >> CLI] `en`
-          - [S1 >> CLI] `conf t`
-          - [S1 >> CLI] `int f0/1`
-          - [S1 >> CLI] `switchport mode access`
-          - [S1 >> CLI] `switchport access vlan 10`
-          - [S1 >> CLI] `ex`
-      - Assigner PC1, PC2, PC3, PC4 à Vlan20:
-        - S1 >> CLI:
-          - [S1 >> CLI] `en`
-          - [S1 >> CLI] `conf t`
-          - [S1 >> CLI] `int range f0/2-3`
-          - [S1 >> CLI] `switchport mode access`
-          - [S1 >> CLI] `switchport access vlan 20`
-          - [S1 >> CLI] `ex`
-        - S2 >> CLI:
-          - [S2 >> CLI] `en`
-          - [S2 >> CLI] `conf t`
-          - [S2 >> CLI] `int range f0/1-2`
-          - [S2 >> CLI] `switchport mode access`
-          - [S2 >> CLI] `switchport access vlan 20`
-          - [S2 >> CLI] `ex`
-      - Assigner ServerDHCP à Vlan 30:
-        - S2 >> CLI:
-          - [S2 >> CLI] `en`
-          - [S2 >> CLI] `con f`
-          - [S2 >> CLI] `int f0/5`
-          - [S2 >> CLI] `switchport mode access`
-          - [S2 >> CLI] `switchport access vlan 30`
-          - [S2 >> CLI] `ex`
-      - Create, assign Ip/Subnet mask for vlan
-      - Configure dhcp server
-      - Configure mode access/trunk in vlan
-      - Tell PC in Vlans where to get ip
-      - Routing for multilayer switch
-      - Check
+Objectif : |
+  Mettre en place un serveur DHCP dans un VLAN "30" puis lui faire délivrer des adresses IP 
+  au différentes machines du réseau. (Vlan 10, Vlan 20) Est-ce possible ?
 
-    
+Exercice:
+  - créer vlan 10, 20, 30 sur tous les switch:
+    - S1 >> CLI:
+      - `en`
+      - `conf t`
+      - `vlan 10`
+      - `vlan 20`
+      - `vlan 30`
+    - S2 >> CLI:
+      - `en`
+      - `conf t`
+      - `vlan 10`
+      - `vlan 20`
+      - `vlan 30`
+    - S3 >> CLI:
+      - `en`
+      - `conf t`
+      - `vlan 10`
+      - `vlan 20`
+      - `vlan 30`
+  - tous les switch doivent être en trunk entre eux (**sans ether channel**):
+    - S1 >> CLI:
+      - `en`
+      - `conf t`
+      - `int range f0/4-5`
+      - `sw trunk encapsulation dot1q`
+      - `sw mode trunk`
+      - `sw trunk allowed vlan 10,20,30`
+      - `exit`
+      - `int range g0/1-2`
+      - `sw trunk encapsulation dot1q`
+      - `sw mode trunk`
+      - `sw trunk allowed vlan 10,20,30`
+    - S2 >> CLI:
+      - `en`
+      - `conf t`
+      - `int range g0/1-2`
+      - `sw trunk encapsulation dot1q`
+      - `sw mode trunk`
+      - `sw trunk allowed vlan 10,20,30`
+      - `exit`
+      - `int range f0/3-4`
+      - `sw trunk encapsulation dot1q`
+      - `sw mode trunk`
+      - `sw trunk allowed vlan 10,20,30`
+    - S3 >> CLI:
+      - `en`
+      - `conf t`
+      - `int range f0/1-2`
+      - `sw trunk encapsulation dot1q`
+      - `sw mode trunk`
+      - `sw trunk allowed vlan 10,20,30`
+      - `exit`
+      - `int range f0/3-4`
+      - `sw trunk encapsulation dot1q`
+      - `sw mode trunk`
+      - `sw trunk allowed vlan 10,20,30`
+  - le routeur dispose d’interfaces virtuels pour chaque vlan et ces interfaces ont une IP:
+    - Router >> CLI:
+      - `en`
+      - `conf t`
+      - `int f0/0`
+      - `no ip address`
+      - `no shut`
+      - `exit`
+      - `int f0/0.10`
+      - `encapsulation dot1Q 10`
+      - `ip address 192.168.10.1 255.255.255.0`
+      - `exit`
+      - `int f0/0.20`
+      - `encapsulation dot1Q 20`
+      - `ip address 192.168.20.1 255.255.255.0`
+      - `exit`
+      - `int f0/0.30`
+      - `encapsulation dot1Q 30`
+      - `ip address 192.168.30.1 255.255.255.0`
+  - le serveur DHCP est associé au vlan 30:
+    - S2 >> CLI:
+      - `en`
+      - `conf t`
+      - `int f0/5`
+      - `sw mode access`
+      - `sw access vlan 30`
+  - le serveur DHCP possède une IP fixe:
+    - Serveur >> Config >> FastEthernet 0:
+      - `ip address 192.168.30.2`
+      - `subnet mask: 255.255.255.0`
+  - l’ip helper-adress est configuré sur le routeur en fonction de l’adresse du serveur DHCP:
+    - Routeur >> CLI:
+      - `int f0/0.10`
+      - `ip helper-address 192.168.30.2`
+      - `int f0/0.20`
+      - `ip helper-address 192.168.30.2`
+      - `int f0/0.30`
+      - `ip helper-address 192.168.30.2`
+  - la gateway du Serveur DHCP est l’interface du routeur sur laquelle il est connecté:
+    - Serveur >> Desktop >> IP Configuration:
+      - gateway:
+        - `192.168.30.1`
+  - les pool d’ip du serveur DHCP sont créés:
+    - Serveur >> Services >> DHCP:
+      - créer pool10:
+        - première IP: 192.168.10.2
+      - créer pool20:
+        - première IP: 192.168.20.2
+      - créer pool30:
+        - première IP: 192.168.30.3
+  - activer service DHCP sur le serveur:
+    - le service DHCP est on
+  - les ordinateurs sont configurés pour demander des adresses IP sur le réseau:
+    - PC0 >> Desktop >> IP Configuration:
+      - Static --> DHCP (action utilisateur)
+    - PC1 >> Desktop >> IP Configuration:
+      - Static --> DHCP (action utilisateur)
+    - PC2 >> Desktop >> IP Configuration:
+      - Static --> DHCP (action utilisateur)
+    - PC3 >> Desktop >> IP Configuration:
+      - Static --> DHCP (action utilisateur)
+    - PC4 >> Desktop >> IP Configuration:
+      - Static --> DHCP (action utilisateur)
