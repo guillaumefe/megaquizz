@@ -11,21 +11,21 @@ Exercice:
         - S2 (f0/3) —> S0 (f0/3)
         - S2 (f0/4) —> S0 (f0/4)
 
-    - S0 >> CLI
+    - S0 >> CLI:
         - conf t
         - int range f0/1-2
         - channel-group 1 mode active
         - int range f0/3-4
         - channel-group 3 mode active
 
-    - S1 >> CLI
+    - S1 >> CLI:
         - conf t
         - int range f0/3-4
         - channel-group 2 mode active
         - int range f0/1-2
         - channel-group 1 mode active
 
-    - S2 >> CLI
+    - S2 >> CLI:
         - conf t
         - int range f0/3-4
         - channel-group 3 mode active
