@@ -1,9 +1,4 @@
-# POEI Cyber Companion bot
-
-This is the app that acts as a companion bot for the poei cyber group at inetum/orsys.
-The functionning is the following.
-
-Get in started
+# Cybersec Companion bot
 
 1) First you do a text-file, formatted this way:
 ```
