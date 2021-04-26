@@ -1,0 +1,26 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "kaawak",
+      "name": "Maxime",
+      "avatar_url": "https://avatars.githubusercontent.com/u/75612402?v=4",
+      "profile": "https://github.com/Kaawak",
+      "contributions": [
+        "content",
+        "security",
+        "test"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "poei-cyber",
+  "projectOwner": "guillaumefe",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
