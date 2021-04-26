@@ -12,7 +12,8 @@
       "profile": "https://github.com/Kaawak",
       "contributions": [
         "content",
-        "security"
+        "security",
+        "test"
       ]
     }
   ],
