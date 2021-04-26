@@ -37,7 +37,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/Kaawak"><img src="https://avatars.githubusercontent.com/u/75612402?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Maxime</b></sub></a><br /><a href="#content-kaawak" title="Content">🖋</a> <a href="#security-kaawak" title="Security">🛡️</a></td>
+    <td align="center"><a href="https://github.com/Kaawak"><img src="https://avatars.githubusercontent.com/u/75612402?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Maxime</b></sub></a><br /><a href="#content-kaawak" title="Content">🖋</a> <a href="#security-kaawak" title="Security">🛡️</a> <a href="https://github.com/guillaumefe/poei-cyber/commits?author=kaawak" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
